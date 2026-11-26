@@ -239,6 +239,7 @@ footer{border-top:1px solid var(--line)}
 @media (max-width:1000px){
 .menu{display:none}
 .nav .btn{margin-left:auto}
+.nav .btn{min-height:42px;padding:0 16px;font-size:14px}
 .case{grid-template-columns:1fr;position:relative;top:0;min-height:0}
 .vis{min-height:340px;order:-1}
 .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -397,6 +398,20 @@ footer{border-top:1px solid var(--line)}
 .cvc{display:block;width:100%;height:auto;background:#fff;border-radius:8px;transform:rotate(3deg);backface-visibility:hidden;outline:1px solid transparent;box-shadow:0 40px 80px rgba(0,0,0,.6);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
 .cvpv:hover .cvc{transform:rotate(0) translateY(-10px) scale(1.02)}
 .cvs canvas{display:block;width:100%;max-width:860px;height:auto;background:#fff;border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.burger{display:inline-grid;place-items:center;align-content:center;gap:5px;width:44px;height:44px;border-radius:50%;border:1px solid #2d3343;background:rgba(255,255,255,.04);cursor:pointer;padding:0;flex:none}
+.burger i{display:block;width:18px;height:2px;border-radius:2px;background:var(--ink);transition:transform .3s,opacity .3s}
+.burger[aria-expanded=true] i:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger[aria-expanded=true] i:nth-child(2){opacity:0}
+.burger[aria-expanded=true] i:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mnav{pointer-events:auto;position:absolute;top:calc(100% + 10px);left:max(5vw,16px);right:max(5vw,16px);max-width:1320px;margin:0 auto;background:rgba(13,15,22,.96);border:1px solid rgba(255,255,255,.08);border-radius:26px;padding:10px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 30px 60px rgba(0,0,0,.5);display:flex;flex-direction:column}
+.mnav[hidden]{display:none}
+.mnav>a{display:flex;align-items:baseline;gap:14px;padding:14px 16px;border-radius:16px;text-decoration:none;font:800 26px/1.1 Manrope,sans-serif;letter-spacing:-.03em;transition:background-color .2s,color .2s}
+.mnav>a span{font:700 12px Manrope,sans-serif;color:var(--coral);letter-spacing:.06em}
+.mnav>a:hover,.mnav>a:focus-visible{background:rgba(255,255,255,.05);color:var(--blue)}
+.mfoot{display:flex;gap:10px;padding:12px 6px 6px;border-top:1px solid var(--line);margin-top:6px}
+.mfoot .btn{flex:1;min-height:50px}
+@media (min-width:1001px){.mnav,.burger{display:none!important}}
+@media (prefers-reduced-motion:no-preference){@keyframes drop{from{opacity:0;transform:translateY(-10px) scale(.98)}to{opacity:1;transform:none}}.mnav:not([hidden]){animation:drop .28s cubic-bezier(.2,.8,.2,1)}.mnav:not([hidden])>a{animation:fade .4s cubic-bezier(.2,.8,.2,1) both}.mnav>a:nth-child(2){animation-delay:.03s}.mnav>a:nth-child(3){animation-delay:.06s}.mnav>a:nth-child(4){animation-delay:.09s}.mnav>a:nth-child(5){animation-delay:.12s}.mnav>a:nth-child(6){animation-delay:.15s}}
 </style>
 </head>
 <body>
@@ -404,7 +419,12 @@ footer{border-top:1px solid var(--line)}
   <a class="logo" href="#top"><span class="km">KS</span><b>Karim Shaaban</b></a>
   <nav class="menu" aria-label="Sections"><a href="#work">Work</a><a href="#process">Process</a><a href="#more">Prototypes</a><a href="#experience">Experience</a><a href="#cv-section">CV</a><a href="#contact">Contact</a></nav>
   <a class="btn pri" href="#contact">Hire me</a>
-</div></header>
+  <button type="button" class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mnav"><i></i><i></i><i></i></button>
+</div>
+<nav class="mnav" id="mnav" aria-label="Sections" hidden>
+  <a href="#work"><span>01</span>Work</a><a href="#process"><span>02</span>Process</a><a href="#more"><span>03</span>Prototypes</a><a href="#experience"><span>04</span>Experience</a><a href="#cv-section"><span>05</span>CV</a><a href="#contact"><span>06</span>Contact</a>
+  <div class="mfoot"><a class="btn pri" href="#contact">Hire me</a><button type="button" class="btn ghost" data-cv>View CV</button></div>
+</nav></header>
 
 <main id="top">
 <section class="hero">
@@ -609,6 +629,12 @@ document.querySelectorAll('.rv,.case,.track').forEach(el=>io.observe(el));
 const co=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting||rm)return;co.unobserve(e.target);const b=e.target,n=+b.dataset.n,suf=b.querySelector('i')?'<i>+</i>':'',t0=performance.now();const step=t=>{const k=Math.min(1,(t-t0)/1200),v=Math.round(n*(1-Math.pow(1-k,3)));b.innerHTML=v+suf;if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)}),{threshold:.6});
 document.querySelectorAll('[data-n]').forEach(b=>co.observe(b));
 const dlg=document.getElementById('cv');
+const bg=document.getElementById('burger'),mn=document.getElementById('mnav');
+const setM=o=>{bg.setAttribute('aria-expanded',String(o));bg.setAttribute('aria-label',o?'Close menu':'Open menu');mn.hidden=!o};
+bg.addEventListener('click',()=>setM(mn.hidden));
+mn.addEventListener('click',e=>{if(e.target.closest('a,button'))setM(false)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!mn.hidden){setM(false);bg.focus()}});
+document.addEventListener('click',e=>{if(!mn.hidden&&!e.target.closest('.mnav,#burger'))setM(false)});
 const cvf=document.getElementById('cvf'),cvs=document.getElementById('cvs');let pdfDoc=null,pagesDone=false;
 const PDFURL='Karim_Ahmed_Shaaban_CV.pdf',PJ='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
 const loadPdf=()=>{if(pdfDoc)return pdfDoc;pdfDoc=new Promise((ok,no)=>{const s=document.createElement('script');s.src=PJ+'pdf.min.js';s.onload=()=>{try{pdfjsLib.GlobalWorkerOptions.workerSrc=PJ+'pdf.worker.min.js';pdfjsLib.getDocument(PDFURL).promise.then(ok,no)}catch(e){no(e)}};s.onerror=no;document.head.appendChild(s)});return pdfDoc};
