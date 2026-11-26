@@ -393,6 +393,10 @@ footer{border-top:1px solid var(--line)}
 .doc u.s{width:58%}
 .cvs iframe{width:100%;max-width:860px;flex:1;min-height:70vh;border:0;border-radius:6px;background:#fff}
 .cvfb{color:var(--muted);font-size:14px}
+[hidden]{display:none!important}
+.cvc{display:block;width:100%;height:auto;background:#fff;border-radius:8px;transform:rotate(3deg);box-shadow:0 40px 80px rgba(0,0,0,.6);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.cvpv:hover .cvc{transform:rotate(0) translateY(-10px) scale(1.02)}
+.cvs canvas{display:block;width:100%;max-width:860px;height:auto;background:#fff;border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
 </style>
 </head>
 <body>
@@ -490,7 +494,7 @@ footer{border-top:1px solid var(--line)}
         <a class="btn ghost" href="Karim_Ahmed_Shaaban_CV.pdf" download="Karim_Ahmed_Shaaban_CV.pdf">Download PDF</a>
       </div>
     </div>
-    <button type="button" class="cvpv" data-cv aria-label="Open full CV"><span class="doc"><b>KARIM AHMED MOHAMED SHAABAN</b><small>UI/UX &amp; Product Designer | Enterprise ERP Systems · Web &amp; Mobile Apps</small><i>Professional summary</i><u></u><u></u><u></u><u class="s"></u><i>Core skills</i><u></u><u></u><u class="s"></u><i>Work experience</i><u></u><u></u><u></u><u class="s"></u></span></button>
+    <button type="button" class="cvpv" data-cv aria-label="Open full CV"><canvas id="cvthumb" class="cvc" hidden></canvas><span class="doc" id="cvdoc"><b>KARIM AHMED MOHAMED SHAABAN</b><small>UI/UX &amp; Product Designer | Enterprise ERP Systems · Web &amp; Mobile Apps</small><i>Professional summary</i><u></u><u></u><u></u><u class="s"></u><i>Core skills</i><u></u><u></u><u class="s"></u><i>Work experience</i><u></u><u></u><u></u><u class="s"></u></span></button>
   </div>
 </div></section>
 
@@ -521,7 +525,7 @@ footer{border-top:1px solid var(--line)}
       <button type="button" class="x" id="cvx" aria-label="Close CV">×</button>
     </div>
   </div>
-  <div class="cvs"><iframe id="cvf" title="Karim Ahmed Mohamed Shaaban CV" data-src="Karim_Ahmed_Shaaban_CV.pdf#view=FitH"></iframe><p class="cvfb">If the CV doesn't show here, <a href="Karim_Ahmed_Shaaban_CV.pdf" target="_blank" rel="noopener">open the PDF</a>.</p></div>
+  <div class="cvs" id="cvs"><iframe id="cvf" title="Karim Ahmed Mohamed Shaaban CV" data-src="Karim_Ahmed_Shaaban_CV.pdf#view=FitH" hidden></iframe><p class="cvfb">If the CV doesn't show here, <a href="Karim_Ahmed_Shaaban_CV.pdf" target="_blank" rel="noopener">open the PDF</a>.</p></div>
 </dialog>
 
 <script>
@@ -605,8 +609,15 @@ document.querySelectorAll('.rv,.case,.track').forEach(el=>io.observe(el));
 const co=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting||rm)return;co.unobserve(e.target);const b=e.target,n=+b.dataset.n,suf=b.querySelector('i')?'<i>+</i>':'',t0=performance.now();const step=t=>{const k=Math.min(1,(t-t0)/1200),v=Math.round(n*(1-Math.pow(1-k,3)));b.innerHTML=v+suf;if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)}),{threshold:.6});
 document.querySelectorAll('[data-n]').forEach(b=>co.observe(b));
 const dlg=document.getElementById('cv');
-const cvf=document.getElementById('cvf');
-document.querySelectorAll('[data-cv]').forEach(b=>b.addEventListener('click',()=>{if(!cvf.src)cvf.src=cvf.dataset.src;if(dlg.showModal)dlg.showModal();else dlg.setAttribute('open','')}));
+const cvf=document.getElementById('cvf'),cvs=document.getElementById('cvs');let pdfDoc=null,pagesDone=false;
+const PDFURL='Karim_Ahmed_Shaaban_CV.pdf',PJ='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
+const loadPdf=()=>{if(pdfDoc)return pdfDoc;pdfDoc=new Promise((ok,no)=>{const s=document.createElement('script');s.src=PJ+'pdf.min.js';s.onload=()=>{try{pdfjsLib.GlobalWorkerOptions.workerSrc=PJ+'pdf.worker.min.js';pdfjsLib.getDocument(PDFURL).promise.then(ok,no)}catch(e){no(e)}};s.onerror=no;document.head.appendChild(s)});return pdfDoc};
+const draw=async(doc,n,cv,w)=>{const pg=await doc.getPage(n),v1=pg.getViewport({scale:1}),sc=w*Math.min(2,window.devicePixelRatio||1)/v1.width,vp=pg.getViewport({scale:sc});cv.width=vp.width;cv.height=vp.height;await pg.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise};
+const thumb=document.getElementById('cvthumb'),cvdoc=document.getElementById('cvdoc');
+const tio=new IntersectionObserver(es=>{if(!es.some(e=>e.isIntersecting))return;tio.disconnect();loadPdf().then(d=>draw(d,1,thumb,thumb.parentElement.clientWidth||500)).then(()=>{thumb.hidden=false;cvdoc.hidden=true}).catch(()=>{})},{rootMargin:'400px'});
+tio.observe(document.getElementById('cv-section'));
+const openCv=async()=>{if(dlg.showModal)dlg.showModal();else dlg.setAttribute('open','');if(pagesDone)return;try{const d=await loadPdf();for(let i=1;i<=d.numPages;i++){const c=document.createElement('canvas');c.setAttribute('aria-label','CV page '+i+' of '+d.numPages);cvs.insertBefore(c,cvs.querySelector('.cvfb'));await draw(d,i,c,Math.min(860,cvs.clientWidth-20))}pagesDone=true}catch(e){if(!cvf.src)cvf.src=cvf.dataset.src;cvf.hidden=false}};
+document.querySelectorAll('[data-cv]').forEach(b=>b.addEventListener('click',openCv));
 document.getElementById('cvx').addEventListener('click',()=>dlg.close());
 dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close()});
 const cp=document.getElementById('copy');
