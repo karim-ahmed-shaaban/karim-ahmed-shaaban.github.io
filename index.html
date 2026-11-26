@@ -633,7 +633,7 @@ document.getElementById('stack').innerHTML=F.map((f,i)=>{
     f.p.forEach(t=>shown.add(t));
     if(f.cs){const x=find('Go Play');act='<div class="acts"><a class="btn solid" href="'+esc(x.l[0][0])+'" target="_blank" rel="noopener">Open the prototype '+arr+'</a></div>'+(x?'<details class="roles"><summary>Open the prototype by role (9)</summary>'+links(x)+'</details>':'');}
     else act='<div class="acts">'+f.p.map((t,j)=>{const x=find(t);if(!x)return '';return x.l.length>1?x.l.map(k=>'<a class="btn ghost" href="'+esc(k[0])+'" target="_blank" rel="noopener">'+esc(k[1])+' ↗</a>').join(''):'<a class="btn '+(j?'ghost':'solid')+'" href="'+esc(x.l[0][0])+'" target="_blank" rel="noopener">'+esc((f.l&&f.l[j])||'Open prototype')+' ↗</a>'}).join('')+'</div>';
-  } else act='<div class="nda">'+lock+'Confidential client work. Walkthrough available in interviews.</div>';
+  } else act='<div class="nda">'+lock+'Confidential client work.</div>';
   return '<article class="case" style="--i:'+i+';--g:'+f.g+'"><div class="txt"><div class="top"><span class="num">'+String(i+1).padStart(2,'0')+' / 09</span><span class="badge'+(f.live?' live':'')+'">'+esc(f.b)+'</span></div><span class="kind">'+esc(f.k)+'</span><h3>'+esc(f.t)+'</h3><p>'+esc(f.d)+'</p><div class="chips">'+f.c.map(c=>'<span>'+esc(c)+'</span>').join('')+'</div>'+act+'</div><div class="vis">'+vis(f,i)+'</div></article>';
 }).join('');
 const R=P.filter(x=>!shown.has(x.t));
