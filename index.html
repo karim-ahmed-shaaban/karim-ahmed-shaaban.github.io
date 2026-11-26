@@ -412,6 +412,33 @@ footer{border-top:1px solid var(--line)}
 .mfoot .btn{flex:1;min-height:50px}
 @media (min-width:1001px){.mnav,.burger{display:none!important}}
 @media (prefers-reduced-motion:no-preference){@keyframes drop{from{opacity:0;transform:translateY(-10px) scale(.98)}to{opacity:1;transform:none}}.mnav:not([hidden]){animation:drop .28s cubic-bezier(.2,.8,.2,1)}.mnav:not([hidden])>a{animation:fade .4s cubic-bezier(.2,.8,.2,1) both}.mnav>a:nth-child(2){animation-delay:.03s}.mnav>a:nth-child(3){animation-delay:.06s}.mnav>a:nth-child(4){animation-delay:.09s}.mnav>a:nth-child(5){animation-delay:.12s}.mnav>a:nth-child(6){animation-delay:.15s}}
+.hero .wrap{position:relative}
+.hero h1,.hero .hi,.hero .role,.hero .hrow,.hero .status{position:relative;z-index:1}
+.tx-orb{position:absolute;right:max(3vw,16px);top:50%;transform:translateY(-54%);width:clamp(260px,25vw,380px);aspect-ratio:1;perspective:1100px;z-index:0}
+.tx-tilt{position:absolute;inset:0;transform:rotateY(var(--ry,-14deg)) rotateX(var(--rx,8deg));transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+.tx-g{position:absolute;left:50%;top:50%;border-radius:50%;translate:-50% -50%}
+.tx-g.tx-g1{width:92%;height:92%;border:1px solid rgba(255,255,255,.1)}
+.tx-g.tx-g2{width:60%;height:60%;border:1px dashed rgba(255,255,255,.16)}
+.tx-g.tx-g3{width:34%;height:34%;border:1px solid rgba(77,124,255,.35);background:radial-gradient(circle,rgba(77,124,255,.28),transparent 70%)}
+.tx-b{position:absolute;inset:0;--r:46;--d:80s;animation:ospin var(--d) linear infinite}
+.tx-d{position:absolute;left:20%;top:20%;width:60%;height:60%;animation:ospin 24s linear infinite reverse}
+.tx-d i{position:absolute;width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 12px #6f95ff;translate:-50% -50%}
+.tx-d i:nth-child(1){left:50%;top:0}.tx-d i:nth-child(2){left:93.3%;top:75%;background:var(--coral);box-shadow:0 0 12px var(--coral)}.tx-d i:nth-child(3){left:6.7%;top:75%;width:6px;height:6px}
+.tx-c{position:absolute;left:50%;top:50%;width:0;height:0;transform:rotate(var(--a)) translateX(calc(var(--r) * 1cqw)) rotate(calc(var(--a) * -1))}
+.tx-orb{container-type:inline-size}
+.tx-t{position:absolute;translate:-50% -50%;display:flex;align-items:center;gap:8px;padding:8px 13px;border-radius:999px;white-space:nowrap;font-size:13px;font-weight:600;color:var(--ink);background:rgba(17,20,29,.72);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 12px 26px rgba(0,0,0,.4);animation:ospin var(--d) linear infinite reverse}
+.tx-t i{width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c)}
+.tx-core{position:absolute;left:50%;top:50%;translate:-50% -50%;width:26%;aspect-ratio:1;border-radius:50%;display:grid;place-content:center;text-align:center;background:radial-gradient(circle at 35% 30%,#6f95ff,#3355d6 60%,#1d2f8a);box-shadow:0 0 0 8px rgba(77,124,255,.12),0 0 60px rgba(77,124,255,.55);transform:translateZ(40px)}
+.tx-core b{font:800 clamp(15px,1.5vw,20px) Manrope,sans-serif;color:#fff;line-height:1}
+.tx-core span{font-size:clamp(8.5px,.75vw,10.5px);letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-top:4px}
+.tx-core::after{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid rgba(111,149,255,.6)}
+@keyframes ospin{to{rotate:360deg}}
+.tx-orb:hover .tx-b,.tx-orb:hover .tx-t,.tx-orb:hover .tx-d{animation-play-state:paused}
+@media (max-width:1000px){.tx-orb{position:relative;right:auto;top:auto;transform:none;width:min(290px,74vw);margin:30px auto 46px}.tx-tilt{--ry:0deg;--rx:0deg}.tx-b{--r:40}.tx-t{font-size:11.5px;padding:6px 10px}}
+@media (prefers-reduced-motion:reduce){.tx-b,.tx-t,.tx-d{animation:none}}
+@media (prefers-reduced-motion:no-preference){@keyframes cpulse{0%{transform:translateZ(40px) scale(1);opacity:.9}100%{transform:scale(1.9);opacity:0}}.tx-core::after{animation:cpulse 2.6s ease-out infinite}
+@keyframes orbIn{from{opacity:0;transform:translateY(-46%) scale(.94)}to{opacity:1;transform:translateY(-54%)}}.tx-orb{animation:orbIn 1.1s cubic-bezier(.2,.8,.2,1) .2s both}
+@media (max-width:1000px){@keyframes orbInM{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}.tx-orb{animation-name:orbInM}}}
 </style>
 </head>
 <body>
@@ -430,6 +457,7 @@ footer{border-top:1px solid var(--line)}
 <section class="hero">
   <span class="orb o1" aria-hidden="true"></span><span class="orb o2" aria-hidden="true"></span>
   <div class="wrap">
+    <div class="tx-orb" aria-hidden="true"><div class="tx-tilt"><span class="tx-g tx-g1"></span><span class="tx-g tx-g2"></span><span class="tx-g tx-g3"></span><div class="tx-b"><span class="tx-c" style="--a:15deg"><span class="tx-t" style="--c:#4d7cff"><i></i>Figma</span></span><span class="tx-c" style="--a:75deg"><span class="tx-t" style="--c:#ff7a59"><i></i>UX research</span></span><span class="tx-c" style="--a:135deg"><span class="tx-t" style="--c:#3ddc84"><i></i>Prototyping</span></span><span class="tx-c" style="--a:195deg"><span class="tx-t" style="--c:#3fd6c0"><i></i>Design systems</span></span><span class="tx-c" style="--a:255deg"><span class="tx-t" style="--c:#b48cff"><i></i>User flows</span></span><span class="tx-c" style="--a:315deg"><span class="tx-t" style="--c:#f5b94a"><i></i>Usability testing</span></span></div><div class="tx-d"><i></i><i></i><i></i></div><div class="tx-core"><b>UI/UX</b><span>Product design</span></div></div></div>
     <span class="status"><i></i>Available for UI/UX &amp; product design roles</span>
     <p class="hi">Hi, I'm</p>
     <h1 aria-label="Karim Shaaban"><span class="ln"><span>Karim</span></span><span class="ln"><span class="o">Shaaban</span></span></h1>
@@ -650,5 +678,6 @@ const cp=document.getElementById('copy');
 cp.addEventListener('click',async()=>{try{await navigator.clipboard.writeText('karim.ahmed1396@gmail.com');cp.textContent='Copied ✓'}catch(err){cp.textContent='karim.ahmed1396@gmail.com'}setTimeout(()=>{cp.textContent='Copy email'},2200)});
 }
 </script>
+<script>(function(){var d=document.querySelector('.tx-orb .tx-tilt'),h=document.querySelector('.hero');if(!d||!h||!matchMedia('(min-width:1001px) and (hover:hover) and (prefers-reduced-motion:no-preference)').matches)return;h.addEventListener('mousemove',function(e){var r=h.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;d.style.setProperty('--ry',(-14+x*12).toFixed(2)+'deg');d.style.setProperty('--rx',(8-y*8).toFixed(2)+'deg')});h.addEventListener('mouseleave',function(){d.style.removeProperty('--ry');d.style.removeProperty('--rx')})})();</script>
 </body>
 </html>
